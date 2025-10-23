@@ -1,13 +1,24 @@
-// src/router.tsx
+ import { QueryClient } from '@tanstack/react-query'
 import { createRouter } from '@tanstack/react-router'
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { routeTree } from './routeTree.gen'
 
-// You must export a getRouter function that
-// returns a new router instance each time
 export function getRouter() {
+  const queryClient = new QueryClient()
   const router = createRouter({
     routeTree,
+    //exposing the QueryClient via router context
+    context: { queryClient },
     scrollRestoration: true,
+    defaultPreload: 'intent',
+  })
+
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+    // optional:
+    // handleRedirects: true,
+    // wrapQueryClient: true,
   })
 
   return router
