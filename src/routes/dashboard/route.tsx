@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { getUser } from "@/data/users";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/posts")({
+export const Route = createFileRoute("/dashboard")({
   beforeLoad: async ({ context }) => {
     if (!context.userSession.isAuthenticated) {
       throw redirect({ to: "/" });
