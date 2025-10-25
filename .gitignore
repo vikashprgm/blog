@@ -1,3 +1,4 @@
 node_modules/
 .tanstack
 package-lock.json
+.env
