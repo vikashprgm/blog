@@ -1,15 +1,20 @@
-import { Card } from "@/components/ui/card";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { getCurrentUserFn } from '@/utils/auth'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/dashboard")({
-  component: DashboardLayout,
-});
+export const Route = createFileRoute('/dashboard')({
+  beforeLoad : async ({location}) =>{
+    const user = await getCurrentUserFn()
+    if(!user){
+      throw redirect({
+        to : '/login',
+        search : {redirect : location.href},
+      })
+    }
+    else console.log(user)
+  },
+  component: RouteComponent,
+})
 
-export function DashboardLayout() {
-  const user = Route.useLoaderData();
-  return (
-    <div>
-      Hi
-    </div>
-  );
+function RouteComponent() {
+  return <div>Hello "/dashboard"!</div>
 }
