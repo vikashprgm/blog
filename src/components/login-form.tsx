@@ -41,7 +41,7 @@ export function LoginForm({className,...props}: React.ComponentProps<"div">){
     onSubmit : async({value}) => {
       const res = await loginFn({data:value})
       if(res.success){
-        route.navigate( {to : '/dashboard'})
+        route.invalidate();
       }
       else console.log(res.error)
     }

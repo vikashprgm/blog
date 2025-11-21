@@ -1,15 +1,21 @@
 import { createServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
-import { authenticate } from './authenticateuser';
 import { useAppSession } from './session';
+import z from 'zod';
+
+const loginSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
 
 export const loginFn = createServerFn({ method: 'POST' })
-  .inputValidator((data: { email: string; password: string }) => data)
+  .inputValidator(loginSchema)
   .handler(async ({ data }) => {
-    // Verify credentials
-    const res = await authenticate({data})
 
-    if (!res.success) {
+    const m=process.env.ADMIN_EMAIL
+    const p=process.env.ADMIN_PASS
+    
+    if(data.email!=m || data.password!=p){
       return { error: 'Invalid credentials' }
     }
 
@@ -34,9 +40,9 @@ export const getCurrentUserFn = createServerFn({ method: 'GET' }).handler(
     const userId = session.data.email
 
     if (!userId) {
-      return null
+      return false;
     }
 
-    return 1;
+    return true;
   },
 )
